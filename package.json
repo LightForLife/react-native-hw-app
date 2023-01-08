@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "metro-bundler": "^0.22.1"
+  }
+}
