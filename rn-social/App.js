@@ -1,13 +1,17 @@
 import { StatusBar } from "expo-status-bar";
+import LoginScreen from "./Screens/LoginScreen";
 import {
   StyleSheet,
   Text,
   View,
   ImageBackground,
   TextInput,
+  Platform,
 } from "react-native";
 
 export default function App() {
+  console.log(Platform.OS);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -15,19 +19,7 @@ export default function App() {
         resizeMode="stretch"
         style={styles.image}
       >
-        <Text style={styles.title}>Войти</Text>
-        <TextInput
-          style={styles.input}
-          // onChangeText={onChangeText}
-          // value={text}
-        />
-        <TextInput
-          style={styles.input}
-          // onChangeText={onChangeNumber}
-          // value={number}
-          placeholder="Адрес электронной почты"
-          keyboardType="numeric"
-        />
+        <LoginScreen />
       </ImageBackground>
     </View>
   );
@@ -39,24 +31,6 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    justifyContent: "center",
-  },
-  input: {
-    height: 50,
-    marginVertical: 16,
-    marginHorizontal: 16,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: "#E8E8E8",
-    backgroundColor: "#F6F6F6",
-    borderRadius: 8,
-  },
-  title: {
-    textAlign: "center",
-    // fontWeight: 500,
-    // fontSize: 30,
-    // lineHeight: 35,
-    // letterSpacing: "0.01",
-    // color: "#212121",
+    justifyContent: "flex-end",
   },
 });
