@@ -1,5 +1,11 @@
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import LoginScreen from "./Screens/LoginScreen";
+import RegistrationScreen from "./Screens/RegistrationScreen";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+
 import {
   StyleSheet,
   Text,
@@ -7,30 +13,33 @@ import {
   ImageBackground,
   TextInput,
   Platform,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 export default function App() {
-  console.log(Platform.OS);
+  const [fontsLoaded] = useFonts({
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+  });
+
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null;
+  } else SplashScreen.hideAsync();
 
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("./img/main-bg.jpg")}
-        resizeMode="stretch"
-        style={styles.image}
-      >
-        <LoginScreen />
-      </ImageBackground>
-    </View>
+    <>
+      {/* <LoginScreen /> */}
+      <RegistrationScreen />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  image: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-});
