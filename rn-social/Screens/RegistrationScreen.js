@@ -6,12 +6,9 @@ import {
   Image,
   ImageBackground,
   TextInput,
-  Button,
-  Linking,
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
-  isShowKeyboard,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -22,8 +19,10 @@ export default function LoginScreen() {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState(true);
+  const [isSecureEntry, setIsSecureEntry] = useState(true);
 
-  const handleLogin = (e) => setName(e);
+  const handleLogin = (e) => setLogin(e);
   const handleEmail = (e) => setEmail(e);
   const handlePassword = (e) => setPassword(e);
 
@@ -59,44 +58,109 @@ export default function LoginScreen() {
               }}
             >
               <View style={styles.avatarBox}>
-                <Image
-                  style={styles.avatarImg}
-                  source={require("../img/avatar.jpg")}
-                  resizeMode="cover"
-                />
-                <Icon name="pluscircleo" size={25} color="#FF6C00" />
+                {image && (
+                  <Image
+                    style={styles.avatarImg}
+                    source={require("../img/avatar.jpg")}
+                    resizeMode="cover"
+                  />
+                )}
+                <TouchableOpacity
+                  style={styles.addAvatarBtn}
+                  activeOpacity={0.9}
+                >
+                  {image ? (
+                    <Icon
+                      name="closecircleo"
+                      size={25}
+                      color="#E8E8E8"
+                      backgroundColor="black"
+                    />
+                  ) : (
+                    <Icon name="pluscircleo" size={25} color="#FF6C00" />
+                  )}
+                </TouchableOpacity>
               </View>
 
               <Text style={styles.titleForm}>Registration</Text>
               <View style={{ marginTop: 33 }}>
                 <TextInput
-                  style={styles.inputLogin}
+                  style={
+                    isShowKeyboard
+                      ? {
+                          ...styles.inputLogin,
+                          borderColor: "#FF6C00",
+                        }
+                      : {
+                          ...styles.inputLogin,
+                          borderColor: "#E8E8E8",
+                        }
+                  }
                   placeholder="Login"
                   onChangeText={handleLogin}
                   value={login}
+                  placeholderTextColor="#BDBDBD"
                   onFocus={() => setIsShowKeyboard(true)}
+                  // onBlur={() => setIsShowKeyboard(false)}
                 />
               </View>
               <View style={{ marginTop: 16 }}>
                 <TextInput
-                  style={styles.inputLogin}
+                  style={
+                    isShowKeyboard
+                      ? {
+                          ...styles.inputLogin,
+                          borderColor: "#FF6C00",
+                        }
+                      : {
+                          ...styles.inputLogin,
+                          borderColor: "#E8E8E8",
+                        }
+                  }
                   placeholder="Email"
                   onChangeText={handleEmail}
                   value={email}
+                  keyboardType="email-address"
+                  placeholderTextColor="#BDBDBD"
                   onFocus={() => setIsShowKeyboard(true)}
+                  // onBlur={() => setIsShowKeyboard(false)}
                 />
               </View>
-              <View style={{ marginTop: 16 }}>
+              <View
+                style={{
+                  marginTop: 16,
+                }}
+              >
                 <TextInput
-                  style={styles.inputLogin}
+                  style={
+                    isShowKeyboard
+                      ? {
+                          ...styles.inputLogin,
+                          borderColor: "#FF6C00",
+                        }
+                      : {
+                          ...styles.inputLogin,
+                          borderColor: "#E8E8E8",
+                        }
+                  }
                   onChangeText={handlePassword}
                   value={password}
                   placeholder="Password"
-                  secureTextEntry={true}
+                  secureTextEntry={isSecureEntry}
+                  placeholderTextColor="#BDBDBD"
                   onFocus={() => setIsShowKeyboard(true)}
+                  // onBlur={() => setIsShowKeyboard(false)}
                 />
+                <TouchableOpacity
+                  style={styles.secureTitle}
+                  activeOpacity={0.8}
+                  onPress={() => setIsSecureEntry((prev) => !prev)}
+                >
+                  <Text style={styles.secureText}>
+                    {isSecureEntry ? "Show" : "Hide"}
+                  </Text>
+                </TouchableOpacity>
               </View>
-
               {!isShowKeyboard && (
                 <>
                   <TouchableOpacity
@@ -107,9 +171,11 @@ export default function LoginScreen() {
                   >
                     <Text style={styles.btnTitle}>Register</Text>
                   </TouchableOpacity>
-                  <Text style={styles.linkLogin}>
-                    Do you alredy have an account? Log in
-                  </Text>
+                  <TouchableOpacity activeOpacity={0.8}>
+                    <Text style={styles.linkLogin}>
+                      Do you alredy have an account? Log in
+                    </Text>
+                  </TouchableOpacity>
                 </>
               )}
             </View>
@@ -138,32 +204,55 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
   },
   avatarBox: {
+    position: "absolute",
     top: -60,
     alignSelf: "center",
-    height: 120,
     width: 120,
-    position: "absolute",
+    height: 120,
     backgroundColor: "#F6F6F6",
-    justifyContent: "center",
-    alignItems: "center",
     borderRadius: 16,
   },
-  //   avatarImg: { resizeMode: "cover" },
+  addAvatarBtn: {
+    position: "absolute",
+    bottom: 14,
+    right: -12,
+    borderRadius: 50,
+    backgroundColor: "#FFFFFF",
+  },
+  avatarImg: {
+    width: 120,
+    height: 120,
+    borderRadius: 16,
+  },
   titleForm: {
     textAlign: "center",
     fontFamily: "Roboto-Medium",
     fontSize: 30,
-    fontWeight: "bold",
     lineHeight: 35,
+    letterSpacing: 0.01,
   },
   inputLogin: {
     height: 50,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#E8E8E8",
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 19,
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
+    placeholderTextColor: "red",
     color: "#212121",
+  },
+  secureTitle: {
+    position: "absolute",
+    right: 20,
+    top: 15,
+  },
+  secureText: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 19,
+    color: "#1B4371",
   },
   loginButton: {
     paddingVertical: 16,
@@ -173,11 +262,18 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: "#FF6C00",
   },
-
-  btnTitle: { color: "#FFFFFF" },
+  btnTitle: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 19,
+    color: "#FFFFFF",
+  },
   linkLogin: {
-    textAlign: "center",
     marginTop: 16,
     fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 19,
+    textAlign: "center",
+    color: "#1B4371",
   },
 });
